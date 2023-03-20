@@ -25,27 +25,24 @@ function hindex2xy(hindex, N) {
     for (var n = 4; n <= N; n *= 2) {
         var n2 = n / 2;
 
-        switch (last2bits(hindex)) {
-        case 0: /* left-bottom */
-            tmp = x; x = y; y = tmp;
-            break;
+        last2 = last2bits(hindex);
 
-        case 1: /* left-upper */
+        if (0 == last2) { // left-bottom 
+            tmp = x; x = y; y = tmp;
+        }
+        else if (1 == last2) { //left-top
             x = x;
             y = y + n2;
-            break;
-
-        case 2: /* right-upper */
+        }
+        else if (2 == last2) { //right-top
             x = x + n2;
             y = y + n2;
-            break;
-
-        case 3: /* right-bottom */
+        }
+        else if (3 == last2) { //right-bottom
             tmp = y;
             y = (n2-1) - x;
             x = (n2-1) - tmp;
             x = x + n2;
-            break;
         }
 
         hindex = (hindex >> 2);
