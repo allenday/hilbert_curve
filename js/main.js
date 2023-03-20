@@ -1,3 +1,5 @@
+var svg = document.getElementById('svg');
+var curve = document.getElementById('curve');
 
 /* N - size of hilbert curve,
  * N must be power of 2;
@@ -54,52 +56,38 @@ function hindex2xy(hindex, N) {
     function last2bits(x) { return (x & 3); }
 }
 
-function hilbertDemo(canvas, size) {
-    var ctx = canvas.getContext('2d');
-
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, size, size);
-
-    ctx.strokeStyle = 'red';
-    ctx.fillStyle = 'red';
-    ctx.lineWidth = 5;
-
-    var N = 32;
-
+function hilbertDemo(canvas, size, N, I) {
     var prev = [0, 0],
         curr;
 
     var blockSize = Math.floor(size / N);
     var offset = blockSize/2;
 
-    for (var i = 0; i < N*N; i += 1) {
+    for (var i = 0; i < N*N && i < I; i += 1) {
         var color = 'hsl(' + Math.floor(i*360/(N*N)) + ', 100%, 50%)';
-        ctx.strokeStyle = color;
-        ctx.fillStyle = color;
 
         curr = hindex2xy(i, N);
 
-        dot(curr);
         line(prev, curr);
+        dot(curr, color);
 
         prev = curr;
     }
 
-    function dot(point) {
+    function dot(point, color) {
         var r = 5;
         var x = point[0], y = point[1];
 
-        ctx.beginPath();
-        ctx.arc(x*blockSize+offset, y*blockSize+offset, r, 0, 2*Math.PI);
-        ctx.fill();
+        circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        circle.setAttribute('cx',x*blockSize+offset);
+        circle.setAttribute('cy',y*blockSize+offset);
+        circle.setAttribute('r',2);
+        circle.setAttribute('style','fill:'+color+';stroke:none');
+        svg.appendChild(circle);
     }
 
     function line(from, to) {
         var off = offset;
-
-        ctx.beginPath();
-        ctx.moveTo(from[0]*blockSize+off, from[1]*blockSize+off);
-        ctx.lineTo(to[0]*blockSize+off, to[1]*blockSize+off);
-        ctx.stroke();
+        curve.setAttribute('points', curve.getAttribute('points')+' '+(to[0]*blockSize+off)+','+(to[1]*blockSize+off));
     }
 }
