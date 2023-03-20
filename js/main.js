@@ -17,7 +17,7 @@ function hindex2xy(hindex, N) {
     ];
 
     var tmp = positions[last2bits(hindex)];
-    hindex = (hindex >>> 2);
+    hindex = (hindex >> 2);
 
     var x = tmp[0];
     var y = tmp[1];
@@ -48,7 +48,7 @@ function hindex2xy(hindex, N) {
             break;
         }
 
-        hindex = (hindex >>> 2);
+        hindex = (hindex >> 2);
     }
 
     return [x, y];
